@@ -184,6 +184,7 @@ HDKeychain HDKeychain::getPublic() const
     pub.child_num_ = child_num_;
     pub.chain_code_ = chain_code_;
     pub.key_ = pub.pubkey_ = pubkey_;
+    pub.pubkeyUncompressed_ = pubkeyUncompressed_;
     return pub;
 }
 
@@ -263,9 +264,11 @@ void HDKeychain::updatePubkey() {
         secp256k1_key curvekey;
         curvekey.setPrivKey(bytes_t(key_.begin() + 1, key_.end()));
         pubkey_ = curvekey.getPubKey();
+        pubkeyUncompressed_ = curvekey.getPubKeyUncompressed();
     }
     else {
         pubkey_ = key_;
+        pubkeyUncompressed_ = key_;
     }
 }
 

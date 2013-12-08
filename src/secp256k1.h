@@ -133,6 +133,8 @@ public:
         if (!bSet) {
             throw std::runtime_error("secp256k1_key::getPubKey() : key is not set.");
         }
+        
+        EC_KEY_set_conv_form(pKey, POINT_CONVERSION_COMPRESSED);
 
         int nSize = i2o_ECPublicKey(pKey, NULL);
         if (nSize == 0) {
@@ -147,6 +149,27 @@ public:
         return pubKey;
     }
 
+    bytes_t getPubKeyUncompressed() const
+    {
+        if (!bSet) {
+            throw std::runtime_error("secp256k1_key::getPubKeyUncompressed() : key is not set.");
+        }
+        
+        EC_KEY_set_conv_form(pKey, POINT_CONVERSION_UNCOMPRESSED);
+        
+        int nSize = i2o_ECPublicKey(pKey, NULL);
+        if (nSize == 0) {
+            throw std::runtime_error("secp256k1_key::getPubKeyUncompressed() : i2o_ECPublicKey failed.");
+        }
+        
+        bytes_t pubKey(nSize, 0);
+        unsigned char* pBegin = &pubKey[0];
+        if (i2o_ECPublicKey(pKey, &pBegin) != nSize) {
+            throw std::runtime_error("secp256k1_key::getPubKeyUncompressed() : i2o_ECPublicKey returned unexpected size.");
+        }
+        return pubKey;
+    }
+    
 private:
     EC_KEY* pKey;
     bool bSet;

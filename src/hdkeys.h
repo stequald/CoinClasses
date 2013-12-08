@@ -83,7 +83,8 @@ public:
     const bytes_t& key() const { return key_; }
 
     const bytes_t& pubkey() const { return pubkey_; }
-
+    const bytes_t& pubkeyUncompressed() const { return pubkeyUncompressed_; }
+    
     bool isPrivate() const { return ( key_.size() == 33 && key_[0] == 0x00); }
     bytes_t hash() const; // hash is ripemd160(sha256(pubkey))
     uint32_t fp() const; // fingerprint is first 32 bits of hash
@@ -107,7 +108,8 @@ private:
     bytes_t key_;        // 33 bytes, first byte is 0x00 for private key
 
     bytes_t pubkey_;
-
+    bytes_t pubkeyUncompressed_;
+    
     bool valid_;
 
     void updatePubkey();
