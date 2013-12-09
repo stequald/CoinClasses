@@ -31,6 +31,7 @@
 #include <algorithm>
 #include <cstring>
 #include <stdexcept>
+#include <stdlib.h> /*free*/
 
 
 #ifdef __APPLE__
