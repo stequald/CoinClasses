@@ -278,15 +278,7 @@ public:
 
         return bytes; 
     }
-
-    secp256k1_point& operator+=(const secp256k1_point& rhs)
-    {
-        if (!EC_POINT_add(group, point, point, rhs.point, ctx)) {
-            throw std::runtime_error("secp256k1_point::operator+= - EC_POINT_add failed.");
-        }
-        return *this;
-    }
-
+    
     bytes_t bytesUncompressed() const
     {
         bytes_t bytes(65);
@@ -318,6 +310,14 @@ public:
         }
         
         return bytes;
+    }
+
+    secp256k1_point& operator+=(const secp256k1_point& rhs)
+    {
+        if (!EC_POINT_add(group, point, point, rhs.point, ctx)) {
+            throw std::runtime_error("secp256k1_point::operator+= - EC_POINT_add failed.");
+        }
+        return *this;
     }
 
     secp256k1_point& operator*=(const bytes_t& rhs)
