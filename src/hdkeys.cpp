@@ -268,7 +268,7 @@ void HDKeychain::updatePubkey() {
     }
     else {
         pubkey_ = key_;
-        pubkeyUncompressed_ = key_;
+        pubkeyUncompressed_ = pubkeyUncompressed_;
     }
 }
 
