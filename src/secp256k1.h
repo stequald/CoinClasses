@@ -287,6 +287,39 @@ public:
         return *this;
     }
 
+    bytes_t bytesUncompressed() const
+    {
+        bytes_t bytes(65);
+        
+        std::string err;
+        
+        BIGNUM* rval;
+        
+        BIGNUM* bn = BN_new();
+        if (!bn) {
+            err = "BN_new failed.";
+            goto finish;
+        }
+        
+        rval = EC_POINT_point2bn(group, point, POINT_CONVERSION_UNCOMPRESSED, bn, ctx);
+        if (!rval) {
+            err = "EC_POINT_point2bn failed.";
+            goto finish;
+        }
+        
+        assert(BN_num_bytes(bn) == 65);
+        BN_bn2bin(bn, &bytes[0]);
+        
+    finish:
+        if (bn) BN_clear_free(bn);
+        
+        if (!err.empty()) {
+            throw std::runtime_error(std::string("secp256k1_point::get() - ") + err);
+        }
+        
+        return bytes;
+    }
+
     secp256k1_point& operator*=(const bytes_t& rhs)
     {
         BIGNUM* bn = BN_bin2bn(&rhs[0], rhs.size(), NULL);

@@ -111,6 +111,7 @@ HDKeychain& HDKeychain::operator=(const HDKeychain& rhs)
         child_num_ = rhs.child_num_;
         chain_code_ = rhs.chain_code_;
         key_ = rhs.key_;
+        pubkeyUncompressed_ = rhs.pubkeyUncompressed_;
         updatePubkey();
     }
     return *this;
@@ -234,6 +235,7 @@ HDKeychain HDKeychain::getChild(uint32_t i) const
         if (K.is_at_infinity()) return child;
 
         child.key_ = child.pubkey_ = K.bytes();
+        child.pubkeyUncompressed_ = K.bytesUncompressed();
     }
 
     child.version_ = version_; 
